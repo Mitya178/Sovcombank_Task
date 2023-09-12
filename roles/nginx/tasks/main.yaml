@@ -1,0 +1,11 @@
+- name: Установка nginx
+  apt:
+    name=nginx
+    state=latest
+  notify:
+    - nginx systemd
+
+- name: Замена nginx.conf
+  template:
+    src=templates/nginx.conf
+    dest=/etc/nginx/nginx.conf

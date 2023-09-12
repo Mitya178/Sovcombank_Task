@@ -10,8 +10,3 @@
     src=templates/nginx.conf
     dest=/etc/nginx/nginx.conf
 
- - name: Рестарт nginx
-   service:
-     name: nginx
-     state: restarted
-

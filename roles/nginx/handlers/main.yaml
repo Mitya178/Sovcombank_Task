@@ -5,7 +5,8 @@
     enabled: yes
     state: started
 ---
- - name: Restart nginx
-   service:
-     name: nginx
-     state: restarted
+ - name: nginx systemd
+  systemd:
+    name: nginx
+    enabled: yes
+    state: restart

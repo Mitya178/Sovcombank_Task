@@ -11,5 +11,12 @@
     dest=/etc/nginx/nginx.conf
   notify:
     - nginx restart
+    
+- name: Замена test1.example.io.conf
+  template:
+    src=templates/test1.example.io.conf
+    dest=/etc/nginx/conf.d/test1.example.io.conf
+  notify:
+    - nginx restart
 
 

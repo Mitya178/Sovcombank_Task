@@ -1,22 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: nginx-deployment-sovkombank
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: nginx-app-sovkombank
   template:
     metadata:
       labels:
-        app: nginx
+        app: nginx-app-sovkombank
     spec:
+      #hostAliases:
+      #- ip: "172.64.195.16"
+        #hostnames:
+        #- "ifconfig.io"
       containers:
       - name: nginx
-        image: nginx
+        image: nginx:latest
         ports:
         - containerPort: 80
+          name: http
+        - containerPort: 443
+          name: https
         volumeMounts:
         - name: nginx-conf
           mountPath: /etc/nginx/nginx.conf
@@ -24,4 +31,4 @@ spec:
       volumes:
       - name: nginx-conf
         configMap:
-          name: nginx-configmap
+          name: sovkombank-configmap

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: nginx-deployment-sovkombank
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: nginx-app-sovkombank
@@ -18,7 +18,7 @@ spec:
         #- "ifconfig.io"
       containers:
       - name: nginx
-        image: nginx:latest
+        image: {{ .Values.image }}
         ports:
         - containerPort: 80
           name: http

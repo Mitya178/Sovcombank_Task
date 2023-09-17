@@ -21,6 +21,9 @@ spec:
         image: nginx:latest
         ports:
         - containerPort: 80
+          name: http
+        - containerPort: 443
+          name: https
         volumeMounts:
         - name: nginx-conf
           mountPath: /etc/nginx/nginx.conf
@@ -40,14 +43,22 @@ data:
   nginx.conf: |
     events {}
     http {
-        upstream sovkombank_upstream {
+        upstream ifconfig {
             server ifconfig.io:443;
        }
 
     server {
         listen      80;
+        listen      443;
+        #return 301 https://ifconfig$request_uri;
+        #listen 443;
         location / {
-            proxy_pass  http://sovkombank_upstream;
+            proxy_set_header Host ifconfig.io;
+            proxy_pass  https://ifconfig;
+            proxy_ssl_server_name on;
+            proxy_ssl_name ifconfig.io;
+            #proxy_set_header X-Real-IP 5.35.4.28;
+            #proxy_set_header X-Forwarded-For 5.35.4.28;
 
             }
         }
@@ -60,9 +71,12 @@ kind: Ingress
 metadata:
   name: nginx-ingress-sovkombank
 spec:
+  tls:
+  - hosts:
+      - test.ifconfig.io
   ingressClassName: nginx
   rules:
-    - host: ifconfig.io
+    - host: test.ifconfig.io
       http:
         paths:
           - path: /
@@ -71,7 +85,7 @@ spec:
               service:
                 name: nginx-service-sovkombank
                 port:
-                  number: 80
+                  number: 443
 
 ---
 
@@ -84,5 +98,5 @@ spec:
     app: nginx-app-sovkombank
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 443
+      targetPort: 443
